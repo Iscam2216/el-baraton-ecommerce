@@ -1,0 +1,23 @@
+
+<div class="row">
+  <div *ngFor="let product of products" class="col-md-4" style="height:100%;">
+    <figure class="card card-product">
+      <figcaption class="info-wrap">
+          <h4 class="title">{{product.name}}</h4>
+          <p class="desc">Id: {{product.id}}</p>
+          <div class="rating-wrap">
+            <div class="label-rating">Cantidad:{{product.quantity}}</div>
+          </div> <!-- rating-wrap.// -->
+      </figcaption>
+      <div class="bottom-wrap">
+        <a *ngIf="product.available" (click)="addCar(product)" class="btn btn-sm btn-primary float-right">Agregar al carrito</a>	
+        <a *ngIf="!product.available" class="btn btn-sm btn-warning float-right">No disponible</a>
+        <div class="price-wrap h5">
+          <span class="price-new">{{product.price}}</span>
+        </div> <!-- price-wrap.// -->
+      </div> <!-- bottom-wrap.// -->
+    </figure>
+  </div> <!-- col // -->
+</div> <!-- row.// -->
+    
+    

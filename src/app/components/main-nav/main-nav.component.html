@@ -1,0 +1,88 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="!(isHandset$ | async)">
+    <mat-toolbar><img class="top-img" src="../../assets/img/el_baraton.png">&nbsp;</mat-toolbar>
+    <mat-nav-list>
+
+      <div class="container"><input placeholder="buscar" (keyup)="filterProduct(4,$event.target.value)" class="browser-default form-control input-sm"/></div>
+     
+      <mat-list-item (click)="startItems()">Todos los productos</mat-list-item>
+      <app-menu-list-item *ngFor="let item of categories" [item]="item"></app-menu-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon id="toggle-icon" aria-label="nav toggle icon"><i class="fa fa-bars fa-lg" aria-hidden="true"></i>&nbsp;</mat-icon>
+      </button>
+      &nbsp;&nbsp;<span style="font-size:18px " id="title-top"></span>
+
+      <div class="carrito" [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" (mouseover)="menuTrigger.openMenu()">
+        <i class="fa fa-cart-plus"><p class="carrito-num" style="color:rgb(248, 210, 210); font-size: 12px" id="carrito-number"></p></i>
+      </div>
+      <mat-menu #menu="matMenu" [overlapTrigger]="false">
+        <span *ngIf="globals.getCar().length==0" (mouseleave)="menuTrigger.closeMenu()">
+          <div class="container" style="margin: 0;padding: 10px;text-align: center; "><i class="fa fa-shopping-cart fa-5x"></i><br><br>No tiene ningún producto en el carrito</div>
+        </span>
+        <span *ngIf="globals.getCar().length>0" (mouseleave)="menuTrigger.closeMenu()" >
+          <div class="mat-menu-item">
+            <button class="btn btn-success" (click)="finalizarCompra()">
+              <span>Finalizar Compra</span>
+            </button>
+            <button class="btn btn-default" (click)="vaciarCarrito()">
+              <span>Vaciar Carrito</span>
+            </button>
+          </div>
+          <div *ngFor="let item of globals.getCar()" class="mat-menu-item" id="{{item.id}}">
+            <div class="row">
+              <div class="col-sm-4">{{item.name}} </div>
+              <div class="col-sm-4">{{item.price}} (X{{item.cantidad}})</div>
+              <div class="col-sm-2" ><button  class="btn btn-warning" (click)="addProduct($event,item)">+</button></div>
+              <div class="col-sm-2"><button (click)="delProduct($event,item)" class="btn btn-danger" >-</button></div>
+            </div>
+          </div>
+          <div class="mat-menu-item">Total:  {{getTotalCar() | currency}}</div>
+        </span>
+      </mat-menu>
+      
+    </mat-toolbar>
+      
+    <!-- Add Content Here -->
+    <div style="margin: 10px;"> 
+
+      <br><button class="btn btn-info" style="margin-bottom: 10px;" (click)="filterAndSort()"><i *ngIf="!filtersort" class="fa fa-filter"></i><i *ngIf="filtersort" class="fa fa-close"></i> Ordenar y Filtrar</button>
+     
+      <div class="row"> 
+         <div class="col-md-2" style="height: 100%; background: rgba(219, 223, 233, 0.925); margin-left: 5px" *ngIf="filtersort"><br><br>
+            <div><select (change)="orderProduct($event.target.value)" class="browser-default ">
+                <option [selected]="globals.getOrderBy()=='0'" value="0">Ordenar por...</option>
+                <option [selected]="globals.getOrderBy()=='1'" value="1">↓ Precio</option>
+                <option [selected]="globals.getOrderBy()=='2'" value="2">↓ Disponibilidad</option>
+                <option [selected]="globals.getOrderBy()=='3'" value="3">↓ Cantidad</option>
+              </select>
+            </div>
+            <br>
+           
+            <div class="custom-control custom-checkbox"><input class="custom-control-input"  id="Disponibilidad" type="checkbox" (change)="filterProduct(1,$event.target.checked)" [checked]="globals.getFilterBy(1)=='true'"/> <label class="custom-control-label" for="Disponibilidad">Solo disponibles</label></div><br>
+            <div >Filtrar por precio:<br><mat-slider thumbLabel [displayWith]="formatLabel" min="{{getNumberPrice(globals.getMinPrice())}}" max="{{getNumberPrice(globals.getMaxPrice())}}" step="1" value="{{globals.getFilterBy(2)}}" (change)="filterProduct(2,$event.value)"></mat-slider></div>
+            <div >Filtrar por cantidad:<br><mat-slider thumbLabel [displayWith]="formatLabel" min="{{getNumberPrice(globals.getMinQuantity())}}" max="{{getNumberPrice(globals.getMaxQuantity())}}" step="1" value="{{globals.getFilterBy(3)}}" (change)="filterProduct(3,$event.value)"></mat-slider></div>
+         </div><script>// With JQuery
+            $("#ex2").slider({});
+            
+            // Without JQuery
+            var slider = new Slider('#ex2', {});</script>
+         <div class="col"><router-outlet></router-outlet></div> 
+      </div> 
+   </div>
+    
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

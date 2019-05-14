@@ -1,0 +1,50 @@
+
+$primary-color:rgb(154, 57, 173);
+$primary-dark-color:rgb(104, 11, 116);
+$accent-color: rgba(240, 201, 243,0.3);
+
+
+.top-img {
+  position: relative;
+  float: left;
+  background-color: $accent-color;
+  padding: 12px 16px;
+  width: 200px;
+}
+
+.carrito{
+  position: absolute;
+  right: 3px;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.carrito-num{
+  position: absolute;
+  right: 0px;
+  cursor: pointer;
+}
+
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 200px;
+}
+
+.sidenav .mat-toolbar {
+  background: $accent-color;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+  padding-left: 0px;
+}
+
